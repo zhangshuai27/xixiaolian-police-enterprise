@@ -151,7 +151,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const GUIDE='如您想咨询经济犯罪案件相关的问题，可以就近到属地派出所咨询，或到西城公安分局经济犯罪侦查支队受案中心前台咨询（联系电话63565726）。';
 const STORAGE='xixiaolian-police-demo-v1';
 let records=[];try{const saved=JSON.parse(localStorage.getItem(STORAGE)||'[]');if(Array.isArray(saved))records=saved.filter(x=>x&&typeof x.title==='string'&&typeof x.desc==='string').slice(0,30)}catch{}
-const state={page:'home',tab:'risk',search:'',history:[],messages:[],chatKind:'station',faqCategory:'全部',faqQuery:'',faqId:'internal',legalMode:'home',legalMessages:[],chatInput:'',draft:{type:'普法问题',title:'',desc:'',agree:false}};
+const state={page:'home',tab:'risk',search:'',history:[],messages:[],chatKind:'station',faqConversation:false,faqMessages:[],faqCategory:'全部',faqQuery:'',faqId:'internal',legalMode:'home',legalMessages:[],chatInput:'',draft:{type:'普法问题',title:'',desc:'',agree:false}};
 const legalHomeHTML=$('#legalContent').innerHTML;
 const articles=[
 {id:'internal',type:'risk',tag:'内部管理',icon:'shield',title:'企业内部风险，从这几个环节开始防范',summary:'围绕采购、付款和岗位权限，关注日常管理中的风险信号。',blocks:[['从流程里识别风险','采购审批、资金支付、费用报销等环节，应留意职责过度集中、凭证不完整、审批流于形式等管理问题。这些信号用于提示进一步核查，不能直接作为犯罪认定。'],['把关键环节管起来','企业可结合实际建立岗位分工、复核与定期检查机制，明确审批权限和记录要求，减少单一岗位对业务全过程的控制。'],['发现具体问题时','如涉及具体经济犯罪案件，请通过线下正式渠道咨询。不要把涉案材料、人员身份信息或商业秘密上传到本栏目。']]},
@@ -175,23 +175,24 @@ const faqs=[
 {id:'contact',category:'服务指引',q:'经济犯罪案件相关问题，到哪里咨询？',summary:'查看属地派出所或西城经侦窗口指引',answer:GUIDE,guide:true},
 {id:'training',category:'服务指引',q:'想请经侦讲解企业风险，在哪里提需求？',summary:'通过企业出题提交普法选题或培训需求',answer:'进入“企业出题”，选择普法问题或培训需求，填写希望了解的主题。工作人员可定期汇总共性需求，择题开展普法答疑或培训。\n\n提交需求不代表培训已预约成功，也不承诺逐条即时回复。',demand:true}
 ];
-function faq(){return `<section class="popular-questions"><h2>大家都在问</h2><div class="faq-list">${faqs.map(f=>`<button class="faq-row" data-action="faqDetail" data-id="${f.id}"><span>${f.q}<small>${f.summary}</small></span>${icon('chevron')}</button>`).join('')}</div><button class="question-demand" data-action="leave"><span>没找到想问的？企业出题</span>${icon('arrow')}</button></section>`}
+function faq(){if(state.faqConversation)return `<button class="text-btn" data-action="faqList">‹ 查看其他常见问题</button>${chat(state.faqMessages)}`;return `<section class="popular-questions"><h2>大家都在问</h2><div class="faq-list">${faqs.map(f=>`<button class="faq-row" data-action="faqAsk" data-id="${f.id}"><span>${f.q}<small>${f.summary}</small></span>${icon('chevron')}</button>`).join('')}</div><button class="question-demand" data-action="leave"><span>没找到想问的？企业出题</span>${icon('arrow')}</button></section>`}
 function faqDetail(){const f=faqs.find(x=>x.id===state.faqId)||faqs[0];return `<article class="content-sheet"><span class="tiny-tag">${f.category}</span><h2>${f.q}</h2><div class="source">常见咨询 · ${f.guide?'对接人员提供的渠道信息':'示例答复，待经侦审核'}</div><p style="white-space:pre-line">${esc(f.answer)}</p>${f.source?`<button class="secondary" data-action="article" data-id="${f.source}">${icon('book')} 查看关联资料</button>`:''}${f.guide?'<button class="secondary" data-action="guide">有事找谁 · 查看完整指引</button>':''}${f.demand?'<button class="secondary" data-action="training">企业出题 · 提出培训需求</button>':''}</article><button class="primary" data-action="ask" data-q="${esc(f.q)}">继续问小联</button>`}
 function library(){const visible=articles.filter(a=>a.type===state.tab&&(!state.search||(a.title+a.summary+a.tag).includes(state.search)));return `<div class="page-intro"><h2>经侦知识库</h2><p>了解常见风险，让防范走在前面</p></div><label class="search">${icon('search')}<input id="knowledgeSearch" aria-label="搜索知识" placeholder="搜索风险、案例或法律知识" value="${esc(state.search)}"></label><div class="tabs" role="tablist">${[['risk','风险防范'],['cases','典型案例'],['law','法律知识']].map(([t,n])=>`<button role="tab" aria-selected="${state.tab===t}" class="${state.tab===t?'active':''}" data-action="tab" data-tab="${t}">${n}</button>`).join('')}</div><div id="libraryResults"><div class="result-count">${visible.length}篇内容示例 · 待经侦审核发布</div>${visible.map(a=>`<button class="library-card" data-action="article" data-id="${a.id}"><span class="tiny-tag">${a.tag}</span><h3>${a.title}</h3><p>${a.summary}</p><span class="meta"><span>演示资料 · 约2分钟阅读</span><span>阅读详情 →</span></span></button>`).join('')||`<div class="empty">${icon('search')}<h3>暂未找到相关内容</h3><p>试试其他关键词，或留下您希望了解的主题。</p><button class="primary" data-action="leave">企业出题</button></div>`}</div>`}
 function article(){const a=articles.find(x=>x.id===state.article)||articles[0];return `<article class="content-sheet"><span class="tiny-tag">${a.tag}</span><h2>${a.title}</h2><div class="source">内容示例 · 产品演示编写 · 待经侦审核</div>${a.blocks.map(([h,t])=>`<h3>${h}</h3><p>${t}</p>`).join('')}<p class="article-foot">以上内容用于演示页面呈现方式，不能用于具体案件判断。正式上线后展示经审核的来源和更新日期。</p></article><button class="primary" data-action="ask" data-q="${a.type==='risk'&&a.id==='contract'?'签合同前要注意什么？':'企业内部风险如何防范？'}">${icon('chat')} 向小联了解相关防范知识</button>${offlineStrip()}`}
-function chat(){return `<div class="chat-intro"><div class="ask-face"><img src="assets/law-assistant.png" alt="小联说法务"></div><h2>${state.chatKind==='legal'?'小联说法务':'经侦知识问答'}</h2><p>您可以问一般知识，也可以查看相关资料</p></div><div class="chat-hint">AI问答演示 · 具体案件请线下咨询</div><div class="chat-area">${state.messages.length?state.messages.map(m=>`<div class="bubble ${m.role}">${m.role==='assistant'?'<label>小联 · 示例答复</label>':''}<p>${esc(m.text)}</p>${m.source?`<button class="chat-source" data-action="article" data-id="${m.source}">${icon('book')} 查看相关内容示例</button>`:''}${m.guide?'<button class="chat-source" data-action="guide">有事找谁 · 查看线下咨询指引 →</button>':''}${m.demand?'<button class="chat-source" data-action="leave">企业出题 · 提出普法需求 →</button>':''}</div>`).join(''):`<div class="bubble assistant"><label>小联 · 示例答复</label><p>您好！您想了解哪方面的风险防范知识？可以从下面的问题开始。</p></div><div class="chat-choices"><button data-action="ask" data-q="企业内部风险如何防范？">企业内部风险如何防范？</button><button data-action="ask" data-q="签合同前要注意什么？">签合同前要注意什么？</button><button data-action="ask" data-q="经济犯罪案件到哪里咨询？">经济犯罪案件到哪里咨询？</button></div>`}</div>`}
+function chat(conversation=state.messages){return `<div class="chat-intro"><div class="ask-face"><img src="assets/law-assistant.png" alt="小联说法务"></div><h2>${state.chatKind==='legal'?'小联说法务':'经侦知识问答'}</h2><p>您可以问一般知识，也可以查看相关资料</p></div><div class="chat-hint">AI问答演示 · 具体案件请线下咨询</div><div class="chat-area">${conversation.length?conversation.map(m=>`<div class="bubble ${m.role}">${m.role==='assistant'?'<label>小联 · 示例答复</label>':''}<p>${esc(m.text)}</p>${m.source?`<button class="chat-source" data-action="article" data-id="${m.source}">${icon('book')} 查看相关内容示例</button>`:''}${m.guide?'<button class="chat-source" data-action="guide">有事找谁 · 查看线下咨询指引 →</button>':''}${m.demand?'<button class="chat-source" data-action="leave">企业出题 · 提出普法需求 →</button>':''}</div>`).join(''):`<div class="bubble assistant"><label>小联 · 示例答复</label><p>您好！您想了解哪方面的风险防范知识？可以从下面的问题开始。</p></div><div class="chat-choices"><button data-action="ask" data-q="企业内部风险如何防范？">企业内部风险如何防范？</button><button data-action="ask" data-q="签合同前要注意什么？">签合同前要注意什么？</button><button data-action="ask" data-q="经济犯罪案件到哪里咨询？">经济犯罪案件到哪里咨询？</button></div>`}</div>`}
 function isCase(q){return /报案|报警|立案|受案|案情|案件|证据|我.{0,8}被|我们.{0,8}被骗|涉嫌|是否.{0,5}犯罪|构成.{0,5}罪|算不算|追回|追赃|刑事还是民事/.test(q)}
 function ask(q,kind='station'){
  q=q.trim();if(!q)return;if(kind==='legal'){askLegal(q);return}
- state.chatKind='station';state.chatInput='';state.messages.push({role:'user',text:q});let m={role:'assistant',text:''};
- if(isCase(q)){m.text='具体事项需要通过正式渠道，由专业人员结合事实和证据了解。\n\n'+GUIDE+'\n\n请勿在这里提交案情或案件材料。';m.guide=true}
+ const inFaq=state.page==='faq';const conversation=inFaq?state.faqMessages:state.messages;const matched=faqs.find(f=>f.q===q);state.chatKind='station';state.chatInput='';conversation.push({role:'user',text:q});let m={role:'assistant',text:''};
+ if(matched){m.text=matched.answer;m.source=matched.source;m.guide=matched.guide;m.demand=matched.demand}
+ else if(isCase(q)){m.text='具体事项需要通过正式渠道，由专业人员结合事实和证据了解。\n\n'+GUIDE+'\n\n请勿在这里提交案情或案件材料。';m.guide=true}
  else if(/培训|想听|出题/.test(q)){m.text=faqs.find(f=>f.id==='training').answer;m.demand=true}
  else if(/高收益|金融|投资/.test(q)){m.text=faqs.find(f=>f.id==='investment').answer;m.source='investment'}
  else if(/内部|职务|采购|员工|侵占/.test(q)){m.text=faqs.find(f=>f.id==='internal').answer;m.source='internal'}
  else if(/合同|交易|签约/.test(q)){m.text=faqs.find(f=>f.id==='contract').answer;m.source='contract'}
  else if(/典型案例|案例.{0,6}防范/.test(q)){m.text=faqs.find(f=>f.id==='case-reading').answer;m.source='case1'}
  else{m.text='当前演示资料暂未覆盖这个问题。您可以查看常见咨询，或通过企业出题提出希望了解的普法主题。';m.demand=true}
- state.messages.push(m);go('chat',{chatKind:'station'});requestAnimationFrame(()=>$('#serviceContent').scrollTop=$('#serviceContent').scrollHeight)
+ conversation.push(m);if(inFaq){state.faqConversation=true;render()}else{go('chat',{chatKind:'station'})}requestAnimationFrame(()=>$('#serviceContent').scrollTop=$('#serviceContent').scrollHeight)
 }
 function askLegal(q){q=q.trim();if(!q)return;state.legalMode='chat';state.legalMessages.push({role:'user',text:q});state.legalMessages.push({role:'assistant',text:'这里是小联说法务的法律知识问答入口。当前原型未接入原有法务知识库，暂不生成个案建议。\n\n如希望了解经侦风险防范知识，可从首页右侧进入警企服务站。'});renderLegal();document.body.classList.remove('mobile-service');}
 function renderLegal(){
@@ -217,7 +218,9 @@ document.addEventListener('click',e=>{
  if(a==='enter'){state.history=[];go('home',{},false)}
  else if(a==='back')back();
  else if(a==='home'){state.history=[];go('home',{},false)}
- else if(a==='faq')go('faq',{faqQuery:'',faqCategory:'全部'});
+ else if(a==='faq')go('faq',{faqQuery:'',faqCategory:'全部',faqConversation:false});
+ else if(a==='faqAsk'){const f=faqs.find(x=>x.id===b.dataset.id);if(f)ask(f.q)}
+ else if(a==='faqList'){state.faqConversation=false;render();$('#serviceContent').scrollTop=0}
  else if(a==='faqCategory'){state.faqCategory=b.dataset.category;render()}
  else if(a==='faqDetail')go('faqDetail',{faqId:b.dataset.id});
  else if(a==='library')go('library',{tab:b.dataset.tab||'risk',search:''});
@@ -238,7 +241,7 @@ document.addEventListener('click',e=>{
  else if(a==='caseGuide'){$('#caseDialog').close();go('guide')}
  else if(a==='voice')toast('语音输入为界面演示，暂未接入录音能力');
  else if(a==='copy'){if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText('63565726').then(()=>toast('号码已复制：63565726')).catch(()=>toast('联系电话：63565726'));else toast('联系电话：63565726（可长按号码复制）')}
- else if(a==='reset'){records=[];state.messages=[];state.legalMessages=[];state.chatInput='';state.legalMode='home';state.draft={type:'普法问题',title:'',desc:'',agree:false};try{localStorage.removeItem(STORAGE)}catch{}state.history=[];renderLegal();go('home',{},false);toast('已清空本浏览器的演示记录')}
+ else if(a==='reset'){records=[];state.messages=[];state.faqMessages=[];state.faqConversation=false;state.legalMessages=[];state.chatInput='';state.legalMode='home';state.draft={type:'普法问题',title:'',desc:'',agree:false};try{localStorage.removeItem(STORAGE)}catch{}state.history=[];renderLegal();go('home',{},false);toast('已清空本浏览器的演示记录')}
 });
 document.addEventListener('input',e=>{
  if(e.target.id==='knowledgeSearch'){state.search=e.target.value;const temp=document.createElement('div');temp.innerHTML=library();$('#libraryResults').innerHTML=temp.querySelector('#libraryResults').innerHTML}
