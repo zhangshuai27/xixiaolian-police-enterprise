@@ -1,0 +1,35 @@
+/* 用户提供的小联说法务首页：数字人、带凹口的介绍卡片、双服务入口与问答。 */
+.approved-external #servicePhone.ls-mode{border:3px solid #f5fbff;border-radius:30px;background:radial-gradient(ellipse at 52% 14%,#e5f4ff99 0,transparent 43%),radial-gradient(ellipse at 3% 44%,#e2f4ffad,transparent 50%),linear-gradient(152deg,#cbe3ff,#e5f5ff 65%,#edf3f7);box-shadow:0 0 0 1px #e5edf6}
+.approved-external #servicePhone.ls-mode .nav{background:transparent;border-bottom:1px solid #ffffff75;min-height:54px;color:#0d1929}
+.ls-mode .nav-title{font-size:17px;font-weight:500;color:#0d1929}.ls-mode .back{color:#101c2f}
+.approved-external #servicePhone .ls-screen{padding:0;background:none;scrollbar-width:none}
+.ls-screen>.page{padding:0;min-height:100%}.ls-home{padding:20px 14px 22px}
+.ls-avatar{width:104px;height:104px;position:relative;z-index:2;border-radius:50%;background:linear-gradient(145deg,#d3e5ff,#aebef2);border:2px solid white;margin:0 auto -11px;box-shadow:0 0 0 10px #eefaff2a,0 0 0 23px #f1fbff12;overflow:hidden}
+.ls-avatar img{position:absolute;max-width:none;width:121%;height:auto;left:-10%;top:5%;display:block}
+.ls-card{isolation:isolate;position:relative;padding:27px 10px 5px;text-align:center}
+.ls-card-surface{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;fill:#f9fcff88;stroke:#fff;stroke-width:1;filter:drop-shadow(0 2px 9px #a9c7e909)}
+.ls-card h2{font-size:28px;color:#005dff;line-height:1.25;font-weight:750;letter-spacing:.4px;margin:3px 0 10px;text-shadow:0 1px #fff}
+.ls-tagline{display:table;margin:0 auto 11px;background:#ffffffec;padding:4px 14px;border-radius:7px;font-size:14px;color:#141b31;line-height:1.65}
+.ls-description{text-align:left;font-size:14px;line-height:1.7;color:#141b2e;margin:0 1px 8px}
+.ls-routes{display:grid;gap:7px}
+.ls-routes>button{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border-radius:10px;padding:8px 11px;line-height:1.5;min-width:0}
+.ls-station{border:1px solid #1265ff;background:linear-gradient(110deg,#ecf5ffdd,#e3efff80);box-shadow:0 3px 6px #1774ff0c;min-height:56px;color:#071b60}
+.ls-route-icon{display:grid;place-items:center;flex-shrink:0;width:32px;color:#0769ff}.ls-route-icon svg{width:30px;height:32px;stroke-width:2;fill:none}
+.ls-route-copy{min-width:0;flex:1}.ls-route-copy strong{display:block;font-size:16px;line-height:1.4;font-weight:700;color:#071a60}.ls-route-copy small{display:block;font-size:12px;line-height:1.6;color:#687da6;margin-top:1px}
+.ls-routes>button>svg{width:14px;height:19px;margin-left:auto;stroke-width:2.1;color:#0569ff;flex-shrink:0}
+.ls-labor{background:#ffffffef;border:1px solid #fff;min-height:43px;color:#0b1b57}.ls-labor .ls-route-icon{color:#68718e}.ls-labor .ls-route-icon svg{height:29px;width:27px;stroke-width:1.9}
+.ls-labor-copy{display:flex;align-items:center;gap:13px;min-width:0}.ls-labor-copy strong{font-size:15px;font-weight:700;white-space:nowrap}.ls-labor-copy small{font-size:12px;color:#727a97;white-space:nowrap}.ls-labor-copy i{height:14px;width:1px;background:#85a5ff;display:block}.ls-routes>.ls-labor>svg{color:#7e859f;stroke-width:1.7}
+.ls-question-list{display:grid;gap:8px;margin-top:12px}.ls-question-list>button{background:#ffffffeb;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:41px;padding:10px 12px;border-radius:9px;text-align:left;font-size:13px;color:#171c26;line-height:1.6}
+.ls-question-list>button>svg{color:#8993a9;width:13px;height:17px;stroke-width:1.7}
+.ls-composer{padding:10px 14px 6px;background:linear-gradient(transparent,#eaf2f8b0 45%);flex-shrink:0}
+.ls-composer form{display:flex;align-items:center;gap:11px;min-height:47px;background:#fffffff5;border:1px solid #fff;border-radius:30px;padding:8px 9px 8px 16px;box-shadow:0 7px 15px #647e9c0c}
+.ls-composer input{flex:1;min-width:0;width:100%;border:0;outline:0;background:none;color:#343e53;font-size:14px}.ls-composer input::placeholder{color:#929bb2}
+.ls-mic{display:grid;place-items:center;background:none;padding:0;color:#7f879f;flex-shrink:0}.ls-mic svg{height:24px;width:23px;stroke-width:1.8}
+.ls-send{display:grid;place-items:center;background:#087aff;color:white;border-radius:50%;height:31px;width:31px;padding:7px;flex-shrink:0}.ls-send svg{fill:white;width:21px;height:21px;stroke-width:1}.ls-send:disabled{opacity:1;background:#d5deea;cursor:default}
+.ls-composer>p{font-size:10px;color:#7a89a9;text-align:center;line-height:1.5;margin:5px 0 0}
+.ls-subpage{padding:15px 14px 20px}.ls-case-note{background:#ffffffeb;border-radius:16px;padding:18px;margin-bottom:18px}.ls-case-note h3{font-size:16px;margin-bottom:10px}.ls-case-note p{font-size:13px;color:#7588a4;line-height:1.9}
+.ls-return{display:block;text-align:center;background:#f5faffd9;border:1px solid #d8e7fa;border-radius:10px;width:100%;padding:10px 12px;font-size:13px;color:#387ac7;margin-top:16px}
+.ls-conversation{display:flex;flex-direction:column;gap:13px}.ls-chat-heading{text-align:center;margin:10px 0 14px}.ls-chat-heading h2{font-size:24px;color:#1b61bd}.ls-chat-heading p{font-size:12px;color:#7e95b7;margin-top:5px}
+.ls-message{padding:13px 15px;border-radius:14px;font-size:13px;line-height:1.8;max-width:95%;overflow-wrap:anywhere}.ls-message p{white-space:pre-line;margin:0}.ls-message small{display:block;font-size:10px;color:#8197b6;margin-bottom:4px}.ls-assistant{align-self:flex-start;background:#fff}.ls-user{align-self:flex-end;background:#c4e2ff;border-bottom-right-radius:3px}
+@media(max-width:700px){.approved-external #servicePhone.ls-mode{height:100dvh;min-height:0;border:0;border-radius:0;max-height:none;box-shadow:none}.ls-composer{padding-bottom:calc(6px + env(safe-area-inset-bottom))}.ls-home{padding-top:20px}.ls-card h2{font-size:27px}.ls-tagline{font-size:13px}.ls-description{font-size:13px}.ls-route-copy strong{font-size:15px}.ls-question-list>button{font-size:13px}}
+@media(max-width:360px){.ls-home{padding-inline:11px}.ls-card{padding-inline:9px}.ls-labor-copy{gap:10px}.ls-labor-copy small{font-size:11px}.ls-question-list>button{font-size:12px}.ls-routes>button{gap:10px}.ls-route-copy small{font-size:11px}}

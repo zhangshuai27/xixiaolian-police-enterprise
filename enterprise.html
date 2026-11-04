@@ -130,6 +130,7 @@
 <link rel="stylesheet" href="demand-flow.css?v=20261021">
 <link rel="stylesheet" href="report-flow.css?v=20261026">
 <link rel="stylesheet" href="departments.css?v=20261021">
+<link rel="stylesheet" href="legal-services.css?v=20261104">
 <script>if(new URLSearchParams(location.search).has("embedded"))document.documentElement.classList.add("prototype-embedded")</script><link rel="stylesheet" href="prototype-shell.css?v=20261021-unified"></head>
 <body class="portal-mode">
 <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"><defs>
@@ -192,7 +193,7 @@ function openService(){document.body.classList.remove('portal-mode');document.bo
 function go(page,extra={},push=true){if(push&&page!==state.page)state.history.push({page:state.page,tab:state.tab,article:state.article,faqId:state.faqId,faqCategory:state.faqCategory,faqQuery:state.faqQuery,search:state.search,chatKind:state.chatKind,scroll:$('#serviceContent').scrollTop});Object.assign(state,extra,{page});openService();render();$('#serviceContent').scrollTop=0}
 function back(){if(state.history.length){const previous=state.history.pop();Object.assign(state,previous);render();$('#serviceContent').scrollTop=previous.scroll||0}else{state.page='home';render();showPortal();}}
 function offlineStrip(){return `<button class="offline-strip" data-action="guide">${icon('pin')}<div><strong>具体案件咨询，请前往线下窗口</strong><small>查看咨询地点及联系方式</small></div>${icon('chevron')}</button>`}
-function externalServices(){return `<section class="department-services"><header class="department-hero"><span class="department-kicker">西城区工商联 · 服务资源</span><h2>部门联办</h2><p>汇聚多方专业力量<br>为企业连接所需服务</p><div class="department-art" aria-hidden="true"><i></i><i></i><span>${icon('shield')}</span></div></header><div class="department-heading"><h3>机构服务</h3><span>按需选择，便捷直达</span></div><div class="department-routes"><button class="department-card" data-action="externalStation"><span class="department-icon police">${icon('shield')}</span><span class="department-copy"><small>公安 · 警企共建</small><strong>警企服务站</strong><span>风险防范 · 普法问答 · 报案指引</span></span>${icon('chevron')}</button><button class="department-card" data-action="comingSoon"><span class="department-icon labor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1M8 5H6a2 2 0 0 0-2 2v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7a2 2 0 0 0-2-2h-2M8 4h8v4H8zM8 14l3 3 5-6"/></svg></span><span class="department-copy"><strong>用工诊断</strong><span>了解企业用工情况</span></span>${icon('chevron')}</button></div><p class="department-foot">更多机构服务将按实际对接情况逐步完善</p></section>`}
+function externalServices(){return lsPage()}
 function home(){return `<section class="station-cover redesigned-home"><header class="civic-hero"><div class="city-art" aria-hidden="true"><i></i><i></i><i></i><i></i></div><div class="civic-copy"><h2>西城区工商联 ·<br>西城公安分局经侦支队 共建</h2><span class="hero-rule"></span><p>警 企 同 心 · 护 航 发 展</p></div><div class="civic-shield" aria-hidden="true">${icon('shield')}</div><div class="hero-wave"></div></header><div class="service-warning"><span class="warning-shield">!</span><div><p>提供风险防范知识、普法问答与线下报案准备指引。</p><strong>不在线受理报案，不上传证据材料。</strong></div></div><div class="feature-routes"><button class="feature-route" data-action="faq"><span class="feature-icon">${icon('chat')}</span><span class="feature-copy"><strong>常见咨询</strong><small>别人都在担心什么</small></span><span class="feature-arrow">${icon('chevron')}</span></button><button class="feature-route" data-action="intake"><span class="feature-icon">${icon('book')}</span><span class="feature-copy"><strong>报案指引</strong><small>梳理情况，准备报案材料</small></span><span class="feature-arrow">${icon('chevron')}</span></button><button class="feature-route warm" data-action="leave"><span class="feature-icon">${icon('write')}</span><span class="feature-copy"><strong>企业出题</strong><small>有关风险解疑</small></span><span class="feature-arrow">${icon('chevron')}</span></button><button class="feature-route" data-action="guide"><span class="feature-icon">${icon('pin')}</span><span class="feature-copy"><strong>有事找谁</strong><small>这事该找谁说</small></span><span class="feature-arrow">${icon('chevron')}</span></button></div></section><div class="station-demo-note">交互演示 · 示例资料待经侦审核</div>`}
 const faqs=[
 {id:'internal',category:'内部管理',q:'企业内部风险如何防范？',summary:'采购、审批与付款环节，哪些地方要关注',answer:'可以从企业日常管理流程入手：明确采购、审批、付款等岗位的分工，保留业务凭证和复核记录，并定期检查关键岗位权限与异常业务。\n\n这些是一般防范思路，不能据此认定具体人员或事项是否涉嫌犯罪。',source:'internal'},
@@ -240,7 +241,7 @@ function success(){return `<div class="success-page"><div class="success-icon">$
 function render(){
  document.body.classList.remove('approved-external');if(state.page==='externalServices')document.body.classList.add('approved-external');
  const pages={externalServices,reportSelect,reportVariants,reportInfo,reportQuestions,reportReview,reportResult,reportAudit,home,faq,faqDetail,library,article,chat,leave,messages,guide,success};
- const titles={externalServices:'部门联办',reportSelect:'报案指引',reportVariants:'合同类型',reportInfo:'基本信息',reportQuestions:'报案指引',reportReview:'核对信息',reportResult:'准备指引',reportAudit:'资料核对',home:'警企服务站',faq:'常见咨询',faqDetail:'常见咨询',library:'专题资料',article:'资料详情',chat:'警企服务站',leave:'企业出题',messages:'我的出题',guide:'有事找谁',success:'提交结果'};
+ const titles={externalServices:'小联说法务',reportSelect:'报案指引',reportVariants:'合同类型',reportInfo:'基本信息',reportQuestions:'报案指引',reportReview:'核对信息',reportResult:'准备指引',reportAudit:'资料核对',home:'警企服务站',faq:'常见咨询',faqDetail:'常见咨询',library:'专题资料',article:'资料详情',chat:'警企服务站',leave:'企业出题',messages:'我的出题',guide:'有事找谁',success:'提交结果'};
  $('#serviceTitle').textContent=titles[state.page];$('#deviceLabel').textContent=titles[state.page];
  $('#serviceContent').innerHTML=`<div class="page">${pages[state.page]()}</div>`;
  const showComposer=['home','faq','faqDetail','library','article','chat','guide'].includes(state.page);
@@ -378,6 +379,6 @@ document.addEventListener('click',e=>{
 
 render();
 </script>
-<dialog id="comingSoonDialog" class="coming-soon-dialog" aria-labelledby="comingSoonTitle"><h2 id="comingSoonTitle">敬请期待</h2><button data-action="closeComingSoon">我知道了</button></dialog><script src="demand-flow.js?v=20261021"></script><script src="report-flow.js?v=20261026"></script>
+<dialog id="comingSoonDialog" class="coming-soon-dialog" aria-labelledby="comingSoonTitle"><h2 id="comingSoonTitle">敬请期待</h2><button data-action="closeComingSoon">我知道了</button></dialog><script src="demand-flow.js?v=20261021"></script><script src="report-flow.js?v=20261026"></script><script src="legal-services.js?v=20261104"></script>
 </body>
 </html>
